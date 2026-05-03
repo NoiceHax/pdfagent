@@ -1,0 +1,84 @@
+1. English (basic factual)
+
+Prompt:
+
+What is the main objective of the study?
+
+Expected:
+
+Mentions study purpose
+Includes citation (intro section)
+2. English (data-based)
+
+Prompt:
+
+How many participants were involved in the study and what was their background?
+
+Expected:
+
+“20 students”
+English philology students
+Citation (method/participants)
+3. Hindi (multilingual test)
+
+Prompt:
+
+Students mobile devices ka use kyu karte hain English seekhne ke liye?
+
+Expected:
+
+Convenience, fast access, availability
+Answer in Hindi
+Citation
+4. Hinglish (mixed language)
+
+Prompt:
+
+Mobile devices se students sabse zyada kya learn karte hain? Vocabulary ya grammar?
+
+Expected:
+
+Vocabulary (main)
+Grammar less used
+Citation
+5. English (reasoning + synthesis)
+
+Prompt:
+
+Where do students use mobile devices more frequently and what does this indicate about their learning habits?
+
+Expected:
+
+65% outside classroom
+Informal learning preference
+Citation
+Slight reasoning (but grounded)
+
+
+6. English (outside scope)
+
+Prompt:
+
+What are the best mobile apps for learning English in 2026?
+
+Expected Output:
+
+This information is not present in the provided PDF.
+7. Hindi (generalization outside PDF)
+
+Prompt:
+
+Kya ye study Indian students par bhi apply hoti hai?
+
+Expected Output:
+
+This information is not present in the provided PDF.
+8. Hinglish (future prediction)
+
+Prompt:
+
+Future mein mobile learning ka kya impact hoga globally?
+
+Expected Output:
+
+This information is not present in the provided PDF.
