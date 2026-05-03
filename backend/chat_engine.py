@@ -37,6 +37,32 @@ def _get_groq() -> Groq:
     return _groq_client
 
 
+# --- Language Instructions ---
+
+LANGUAGE_INSTRUCTIONS = {
+    "auto": """## LANGUAGE INSTRUCTION
+- Detect the language the user is writing in and respond in the SAME language.
+- If the user writes in Hindi (Devanagari script), respond entirely in Hindi.
+- If the user writes in Hinglish (Hindi words in English script), respond in Hinglish.
+- If the user mixes languages, match their style naturally.
+- Default to English if the language is unclear.""",
+
+    "english": """## LANGUAGE INSTRUCTION
+- Always respond in English regardless of the user's input language.
+- Keep technical terms in English.""",
+
+    "hindi": """## LANGUAGE INSTRUCTION
+- Always respond in Hindi (Devanagari script) regardless of the user's input language.
+- You may keep widely-used technical terms in English, but all explanations must be in Hindi.
+- Use natural, conversational Hindi — not overly formal or textbook-style.""",
+
+    "hinglish": """## LANGUAGE INSTRUCTION
+- Always respond in Hinglish (Hindi words written in English/Roman script, mixed with English).
+- Example style: "Yeh page pe likha hai ki data ko process karne ke liye pehle validate karo."
+- Keep it casual, natural, and easy to read.
+- Technical terms can stay in English.""",
+}
+
 # --- System Prompt ---
 
 SYSTEM_PROMPT = """You are a PDF-Constrained Conversational Agent.
@@ -76,6 +102,8 @@ Respond EXACTLY with this message and nothing else:
 - If multiple interpretations exist:
   → Choose the most directly supported one
   → Mention the ambiguity briefly
+
+{language_instruction}
 
 ## PDF CONTEXT
 The following are relevant excerpts from the user's uploaded PDF document:
@@ -169,12 +197,13 @@ def chat(
     question: str,
     document_id: str,
     session_id: str | None = None,
+    language: str = "auto",
 ) -> dict:
     """Process a user question and return a grounded answer.
 
     This is the main entry point for the chat pipeline:
     1. Retrieve relevant chunks from the vector store
-    2. Build context-enriched system prompt
+    2. Build context-enriched system prompt with language instructions
     3. Include conversation history for multi-turn context
     4. Call Groq API for generation
     5. Parse response for citations and refusals
@@ -183,6 +212,7 @@ def chat(
         question: The user's question.
         document_id: Which document to query against.
         session_id: Optional session ID for conversation continuity.
+        language: Language preference ('auto', 'english', 'hindi', 'hinglish').
 
     Returns:
         Dict with 'answer', 'citations', 'session_id', 'is_refusal'.
@@ -199,9 +229,10 @@ def chat(
     # 2. Retrieve relevant chunks
     chunks = vector_store.query_chunks(document_id, question)
 
-    # 3. Build system prompt with context
+    # 3. Build system prompt with context and language instruction
     context = _build_context(chunks)
-    system_prompt = SYSTEM_PROMPT.replace("{context}", context)
+    lang_block = LANGUAGE_INSTRUCTIONS.get(language, LANGUAGE_INSTRUCTIONS["auto"])
+    system_prompt = SYSTEM_PROMPT.replace("{context}", context).replace("{language_instruction}", lang_block)
 
     # 4. Get/create session and build message history
     session_id, history = _get_session(session_id)

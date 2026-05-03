@@ -30,13 +30,15 @@ export async function uploadPDF(file, onProgress) {
  * @param {string} question - The user's question.
  * @param {string} documentId - The document to query.
  * @param {string|null} sessionId - Optional session ID for continuity.
+ * @param {string} language - Language preference ('auto', 'english', 'hindi', 'hinglish').
  * @returns {Promise<object>} Chat response with answer and citations.
  */
-export async function sendMessage(question, documentId, sessionId = null) {
+export async function sendMessage(question, documentId, sessionId = null, language = 'auto') {
   const response = await axios.post(`${API_BASE}/chat`, {
     question,
     document_id: documentId,
     session_id: sessionId,
+    language,
   });
 
   return response.data;

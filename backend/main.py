@@ -141,6 +141,7 @@ async def chat_with_pdf(request: ChatRequest):
             question=request.question,
             document_id=request.document_id,
             session_id=request.session_id,
+            language=request.language,
         )
 
         return ChatResponse(

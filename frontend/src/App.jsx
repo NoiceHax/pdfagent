@@ -5,6 +5,7 @@ import ChatMessage from './components/ChatMessage';
 import ChatInput from './components/ChatInput';
 import TypingIndicator from './components/TypingIndicator';
 import PDFViewer from './components/PDFViewer';
+import LanguageSelector from './components/LanguageSelector';
 import { uploadPDF, sendMessage } from './api';
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadMessage, setUploadMessage] = useState('');
   const [documentInfo, setDocumentInfo] = useState(null);
+  const [language, setLanguage] = useState('auto');
 
   // PDF Viewer state
   const [showPdfViewer, setShowPdfViewer] = useState(false);
@@ -71,7 +73,7 @@ export default function App() {
     setIsLoading(true);
 
     try {
-      const result = await sendMessage(question, documentId, sessionId);
+      const result = await sendMessage(question, documentId, sessionId, language);
 
       if (result.session_id) {
         setSessionId(result.session_id);
@@ -152,6 +154,11 @@ export default function App() {
                 </span>
               </div>
             )}
+
+            <LanguageSelector
+              activeLanguage={language}
+              onSwitch={setLanguage}
+            />
 
             {hasDocument && (
               <button

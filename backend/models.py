@@ -22,6 +22,7 @@ class ChatRequest(BaseModel):
     question: str
     document_id: str
     session_id: Optional[str] = None
+    language: str = "auto"
 
 
 class Citation(BaseModel):
